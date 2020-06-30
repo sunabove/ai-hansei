@@ -1,0 +1,1 @@
+SELECT time(strftime('%s','2017-11-01 22:25:28') - strftime('%s','2017-11-01'), 'unixepoch');
