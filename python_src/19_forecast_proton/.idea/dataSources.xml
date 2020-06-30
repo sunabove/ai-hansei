@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="proton_006" uuid="26d36b7a-2309-4595-819f-651fed652185">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:D:\GoogleDrive\work\2020 AI-Challenge\python_src\19_forecast_proton\proton_006.sqlite</jdbc-url>
+    </data-source>
+  </component>
+</project>
