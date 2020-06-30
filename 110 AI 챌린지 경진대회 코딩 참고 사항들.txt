@@ -1,0 +1,89 @@
+* 접속주소
+    Visual Studio Code : http://49.50.172.207:32337
+    Jupyter notebook : http://49.50.172.207:32337/notebook 
+    비밀번호(접속 키) : 6bcdb30b0d664fe5a81b869aa48	
+    베이스라인 코드 Github 주소 : https://github.com/AI-Challenge2020/AI-Challenge2020
+
+* VSC(Visual Studio Code) 사용법
+    - VSC 특정 폴더 바로 열기 : 즐겨찾기에 추가한다.
+        -  http://49.50.172.207:32337/?folder=/tf/notebooks/{???_work}/base_line_code/20_forecast_traffic
+    
+    - VSC 종료 방법 : VSC 종료시에는 아래의 과정을 수행한다.
+        - 모든 브라우저를 닫는다.
+        - 브라우저에서 http://49.50.172.207:32337/?folder=/tf/notebooks/ 방문한다.
+        - 모든 브라우저를 닫는다.
+        
+    - VSC 에서 터미널 실행 방법
+        - 단축키 : Ctrl + ` 또는 Ctrl + Shift + C
+        - 좌상단 메뉴 : Terminal -> New Terminal
+        - 터미널 사용시 주의 사항 :
+            - bash 쉘을 사용한다 : 프롬프터에 현재 폴더가 나타남.
+            - 삭제 명령어 사용시 주의한다.
+            - 남의 파일을 삭제하지 않도록 주의한다.
+        
+    - VSC 폴더 열기
+        - 단축키 : Ctrl + K + O
+        - 좌상단 메뉴 : File -> OpenFoler -> 폴더 선택
+* Framework versions
+    Python version : 3.6.8
+    TensorFlow version : 1.15.0
+    Keras version : 2.2.4-tf
+    Torch version : 1.4.0
+    Torchvision version : 0.5.0
+    OpenCV version : 3.2.0
+
+* python coding 참고 사항 들
+
+# 로그 남기는 법
+
+import logging as log
+import logging
+log.basicConfig(format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)04d] %(message)s',
+    datefmt='%Y-%m-%d:%H:%M:%S',
+    level=logging.INFO)
+
+log.info( "AAAA %s %d %f" % ( "ass", 3, 4.4 ) )
+print( "AAAA %s %s" % ( 3, 4 ) )
+print( "AAAA", 3, 4 ) )
+
+# 정상 코드 / 윈도우 / 유닉스
+logging.basicConfig(format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)04d] %(message)s', datefmt='%Y-%m-%d:%H:%M:%S', level=logging.INFO)
+
+# 비정상 코드 / 유닉스(X) / 윈도우(O)
+logging.basicConfig(format='%(asctime)s %(levelname)-8s [%(filename)s:%(lineno)04d] %(message)', datefmt='%Y-%m-%d:%H:%M:%S', level=logging.INFO)
+
+* 할 일 남기는 방법
+    #TODO LIST 
+    #TODO sun 1342 내 할 일 적기 
+
+* HSV color space 변경 방법
+    If you import tensorflow, you can use the tf.image.rgb_to_hsv() function in the lambda:
+
+    def hsv_conversion(x):
+        import tensorflow as tf    
+        return tf.image.rgb_to_hsv(x)
+    pass
+
+    model.add(Lambda(hsv_conversion, input_shape=(160, 320, 3)))
+
+# 랜덤시드 고정시키기
+    np.random.seed(5)
+
+# plot -> svg 저장
+    plt.savefig('step.svg', format='svg')
+
+* 리스트 곱
+    import numpy  
+    list1 = [1, 2, 3]  
+    
+    # using numpy.prod() to get the multiplications  
+    result1 = numpy.prod(list1) 
+
+* 평균 구하기
+    l = [15, 18, 2, 36, 12, 78, 5, 6, 9]
+    import numpy as np
+    print(np.mean(l))
+
+* 
+
+* end
