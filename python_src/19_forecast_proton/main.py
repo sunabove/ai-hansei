@@ -103,8 +103,12 @@ if not check_table_exists( "xray" ) :
             phase varchar( 10 ) , 
             id integer ,
             time_tag timestamp,
+
             xs float, 
             xl float,
+
+            dxs float default null,
+            dxl float default null,
 
             primary key( phase, id)
         )
@@ -120,7 +124,10 @@ if not check_table_exists( "proton" ) :
             phase varchar( 10 ) , 
             id integer ,
             time_tag timestamp,
+
             proton float,  
+
+            dproton float default null,
 
             primary key( phase, id)
         )
@@ -146,6 +153,15 @@ if not check_table_exists( "epm" ) :
             p7p float, 
             p8p float, 
 
+            dp1p float default null,
+            dp2p float default null, 
+            dp3p float default null, 
+            dp4p float default null, 
+            dp5p float default null, 
+            dp6p float default null, 
+            dp7p float default null, 
+            dp8p float default null,
+
             primary key( phase, id)
         )
     '''
@@ -163,6 +179,9 @@ if not check_table_exists( "swe" ) :
 
             h_density float , 
             sw_h_speed float , 
+
+            dh_density float default null, 
+            dsw_h_speed float default nul,
 
             primary key( phase, id)
         )
@@ -201,11 +220,21 @@ def import_csv_to_sqlite( phase ) :
         conn.execute( sql )
 
         sql = sql_org % ( table_name_org )
+
         log.info( sql )
         conn.execute( sql )
     pass #-- update_time_tag
 
+    def update_negative_data_as_null( table_name, col_name , phase ) :
+        sql = "update %s set %s = NULL where %s = ? and phase = ?"
+        sql = sql % ( table_name, col_name , col_name )
+
+        log.info( sql )
+        conn.execute( sql , (-100, phase,) )
+    pass #-- update_negative_data_as_null
+
     table_name = "xray"
+
     if table_row_count( table_name, phase )  < 1 :    
         log.info( "Import from %s" % table_name )
 
@@ -224,10 +253,17 @@ def import_csv_to_sqlite( phase ) :
 
         cur.execute( sql )
 
+        col_names = ( "xs" , "xl" )
+        for col_name in col_names :
+            update_negative_data_as_null( table_name, col_name, phase )
+        pass
+
         update_time_tag( table_name, table_name_org )
+
     pass #-- xray
 
     table_name = "proton"
+
     if table_row_count( table_name, phase )  < 1 :
         log.info( "Import from %s" % table_name )
 
@@ -246,7 +282,12 @@ def import_csv_to_sqlite( phase ) :
 
         cur.execute( sql )
 
-        update_time_tag( table_name, table_name_org )
+        col_names = [ "proton" ]
+        for col_name in col_names :
+            update_negative_data_as_null( table_name, col_name, phase )
+        pass
+
+        update_time_tag( table_name, table_name_org )        
     pass #-- proton
 
     table_name = "epm" 
@@ -267,6 +308,11 @@ def import_csv_to_sqlite( phase ) :
         log.info( sql )
 
         cur.execute( sql )
+
+        col_names = [ "p1p" , "p2p", "p3p", "p4p", "p5p", "p6p", "p7p", "p8p" ]
+        for col_name in col_names :
+            update_negative_data_as_null( table_name, col_name, phase )
+        pass
 
         update_time_tag( table_name, table_name_org )
     pass #-- epm
@@ -290,6 +336,11 @@ def import_csv_to_sqlite( phase ) :
 
         cur.execute( sql )
 
+        col_names = [ "h_density", "sw_h_speed" ]
+        for col_name in col_names :
+            update_negative_data_as_null( table_name, col_name, phase )
+        pass
+
         update_time_tag( table_name, table_name_org )
     pass #-- swe
 pass #-- import csv to sqlite
@@ -304,7 +355,23 @@ for phase in phases :
     conn.commit()
 pass
 
-conn.commit()
+sql = '''
+    select t2.time_tag, 
+    t2.xs - t1.xs as dxs ,
+    t2.xl - t1.xl as dxl 
+    from xray t2, xray t1
+    where 1 
+        and t2.phase = 'train' and t1.phase='train' 
+        and t2.id = t1.id - 1
+    order by t2.phase, t2.time_tag, t2.id
+    limit 100
+'''
+
+log.info( sql )
+
+df = pandas.read_sql_query( sql, conn)
+
+log.info( df )
 
 cur.close()
 
