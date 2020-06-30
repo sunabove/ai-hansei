@@ -233,6 +233,28 @@ def import_csv_to_sqlite( phase ) :
         conn.execute( sql , (-100, phase,) )
     pass #-- update_negative_data_as_null
 
+    def update_increment_value( table_name, col_name, phase ) :
+        sql = '''
+            update %s t2 
+            set d%s = (     (
+                                selecdt 
+                                    ( t2.%s - t1.%s ) as ds ,
+                                    ( round( ( julianday(t2.time_tag) - julianday(t1.time_tag) )*86400.0 ) as dt
+                                from %s t1 
+                                where t1.phase = ? 
+                                    and t1.id < t2.id 
+                                    and t1.%s is not null
+                                limit 1 
+                             ) 
+                     )
+            where t2.pahse = ? and t2.%s is not null
+        '''
+        sql = sql % ( table_name, col_name , col_name, col_name, table_name, phase, phase )
+
+        log.info( sql )
+        conn.execute( sql )
+    pass #-- update_increment
+
     table_name = "xray"
 
     if table_row_count( table_name, phase )  < 1 :    
@@ -253,12 +275,13 @@ def import_csv_to_sqlite( phase ) :
 
         cur.execute( sql )
 
+        update_time_tag( table_name, table_name_org )
+        
         col_names = ( "xs" , "xl" )
         for col_name in col_names :
             update_negative_data_as_null( table_name, col_name, phase )
+            update_increment_value( table_name, col_name, phase )
         pass
-
-        update_time_tag( table_name, table_name_org )
 
     pass #-- xray
 
@@ -282,12 +305,14 @@ def import_csv_to_sqlite( phase ) :
 
         cur.execute( sql )
 
+        update_time_tag( table_name, table_name_org )
+
         col_names = [ "proton" ]
         for col_name in col_names :
             update_negative_data_as_null( table_name, col_name, phase )
+            update_increment_value( table_name, col_name, phase )
         pass
-
-        update_time_tag( table_name, table_name_org )        
+        
     pass #-- proton
 
     table_name = "epm" 
@@ -309,12 +334,13 @@ def import_csv_to_sqlite( phase ) :
 
         cur.execute( sql )
 
+        update_time_tag( table_name, table_name_org )
+        
         col_names = [ "p1p" , "p2p", "p3p", "p4p", "p5p", "p6p", "p7p", "p8p" ]
         for col_name in col_names :
             update_negative_data_as_null( table_name, col_name, phase )
+            update_increment_value( table_name, col_name, phase )
         pass
-
-        update_time_tag( table_name, table_name_org )
     pass #-- epm
 
     table_name = "swe"
@@ -336,12 +362,14 @@ def import_csv_to_sqlite( phase ) :
 
         cur.execute( sql )
 
+        update_time_tag( table_name, table_name_org )
+
         col_names = [ "h_density", "sw_h_speed" ]
         for col_name in col_names :
             update_negative_data_as_null( table_name, col_name, phase )
+            update_increment_value( table_name, col_name, phase )
         pass
 
-        update_time_tag( table_name, table_name_org )
     pass #-- swe
 pass #-- import csv to sqlite
 
