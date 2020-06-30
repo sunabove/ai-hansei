@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-print( " Hello..... ".center( 50, "*") )
-
-import logging 
+import logging
 import os
 import argparse
 import math
@@ -41,12 +39,14 @@ from torchvision import datasets, transforms
 
 from dataloader import data_loader 
 
+print( " Hello..... ".center(50, "*") )
+
 # TODO: 1000 로그 패키지 임포트
 logging.basicConfig(format='%(asctime)s %(levelname)-5s [%(filename)s:%(lineno)04d] %(message)s', datefmt='%Y-%m-%d:%H:%M:%S', level=logging.INFO)
 log = logging.getLogger(__name__)
 LINE = "*"*100
 
-#TODO 1001 argument parser
+# TODO 1001 argument parser
 args = argparse.ArgumentParser()
 args.add_argument("--lr", type=int, default=0.001)
 args.add_argument("--cuda", type=bool, default=True)
@@ -58,11 +58,11 @@ args.add_argument("--batch", type=int, default=24)
 args.add_argument("--mode", type=str, default="train")
 
 config = args.parse_args()
-#TODO 1001-- argument parse
+# TODO 1001-- argument parse
 
 mode = config.mode
 
-#TODO 1002 dataset path 설정 
+# TODO 1002 dataset path 설정
 
 ds_path = os.path.join('/tf/notebooks/datasets/20_forecast_proton')
 
@@ -73,8 +73,7 @@ pass
 
 log.info("DATASET_PATH : %s" % ds_path)    
 
-import sqlite3
-db_version = 6 #TODO 1002 데이터베이스 버전
+db_version = 6 # TODO 1002 데이터베이스 버전
 db_file_name = "proton_%03d.sqlite" % db_version
 conn = sqlite3.connect( db_file_name )
 cur = conn.cursor()
