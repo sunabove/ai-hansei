@@ -1,47 +1,49 @@
 # -*- coding: utf-8 -*-
 
-import logging
-import os
-import argparse
-import math
-import datetime
-import numpy as np
-import pandas as pd
-import time
-import csv
-from PIL import Image
-import matplotlib.pyplot as plt
-import sqlite3 
-import pandas
-import pandasql as psql
-import pysqldf
-import numpy
-
-import tensorflow as tf
-import tensorflow.keras as keras
-
-from tensorflow.keras import callbacks 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import Dropout
-from tensorflow.keras.layers import Flatten
-from tensorflow.keras.layers import Lambda  
-from tensorflow.keras.layers import LSTM
-from tensorflow.keras.layers import Activation
-from tensorflow.python.keras import backend as K
-
-import torch
-import torch.nn as nn
-
-from torch.optim.lr_scheduler import StepLR
-from torch.utils import data
-from torchvision import datasets, transforms
-
-from dataloader import data_loader 
-
 print( " Hello..... ".center(50, "*") )
 
-# TODO: 1000 로그 패키지 임포트
+if 1 : # TODO 1000 import packages
+    import logging
+    import os
+    import argparse
+    import math
+    import datetime
+    import numpy as np
+    import pandas as pd
+    import time
+    import csv
+    import matplotlib.pyplot as plt
+    import sqlite3 
+    import pandas
+    import pandasql as psql
+    import pysqldf
+
+    from PIL import Image
+
+    import tensorflow as tf
+    from tensorflow import keras
+
+    from tensorflow.keras import callbacks 
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense
+    from tensorflow.keras.layers import Dropout
+    from tensorflow.keras.layers import Flatten
+    from tensorflow.keras.layers import Lambda  
+    from tensorflow.keras.layers import LSTM
+    from tensorflow.keras.layers import Activation
+    from tensorflow.python.keras import backend as K
+
+    import torch
+    import torch.nn as nn
+
+    from torch.optim.lr_scheduler import StepLR
+    from torch.utils import data
+    from torchvision import datasets, transforms
+
+    from dataloader import data_loader
+pass #-- import packages
+
+# TODO: 1000 로그 패키지 설정
 logging.basicConfig(format='%(asctime)s %(levelname)-5s [%(filename)s:%(lineno)04d] %(message)s', datefmt='%Y-%m-%d:%H:%M:%S', level=logging.INFO)
 log = logging.getLogger(__name__)
 LINE = "*"*100
@@ -63,15 +65,9 @@ config = args.parse_args()
 mode = config.mode
 
 # TODO 1002 dataset path 설정
-
-ds_path = os.path.join('/tf/notebooks/datasets/20_forecast_proton')
-
-if os.name is 'nt':  # windows operating system 인 경우
-    log.info("os.name : %s" % os.name)        
-    ds_path = os.path.join( './datasets/' )
-pass
-
-log.info("DATASET_PATH : %s" % ds_path)    
+ds_path = ds_path = os.path.join( './datasets/' )
+log.info("DATASET_PATH : %s" % ds_path)
+# -- dataset path 설정 
 
 db_version = 6 # TODO 1002 데이터베이스 버전
 db_file_name = "proton_%03d.sqlite" % db_version
